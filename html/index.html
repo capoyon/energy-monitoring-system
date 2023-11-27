@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+        integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        #title-bar {
+            width: 100%;
+            color: #000000;
+            /* Add your desired text color */
+            padding: 20px 0px 0px 30px;
+            /* Adjust padding as needed */
+            box-sizing: border-box;
+            /* Include padding in the width calculation */
+            position: fixed;
+            top: 0;
+            left: 0;
+            /* Set to 0 to take the entire width of the screen */
+            z-index: 1;
+            /* Ensure the title bar is above the sidebar */
+        }
+
+        #title-bar a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 25px;
+            /* Adjust font size as needed */
+            font-weight: bolder;
+        }
+
+        #sidebar {
+            margin-top: 40px;
+            width: 145px;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            padding-top: 20px;
+        }
+
+        #sidebar a {
+            padding: 15px 20px;
+            text-decoration: none;
+            text-align: left;
+            font-size: 18px;
+            color: #000000;
+            display: block;
+        }
+
+        #sidebar a:hover {
+            color: #383838;
+        }
+
+        #sidebar .icon {
+            text-align: center;
+            padding: 10px 0;
+        }
+
+        #content {
+            background-color: white;
+            border-left: 2px solid #555;
+            border-top: 2px solid #555;
+            margin-top: calc(55px + 20px);
+            /* 55px for title-bar and 20px for margin-top in sidebar */
+            margin-left: 150px;
+            padding: 4px 10px 10px 10px;
+            border-top-left-radius: 10px;
+            height: calc(100vh - (55px + 20px));
+            /* Adjusted to take the entire bottom space */
+        }
+
+        #s {
+            display: none;
+        }
+
+        @media screen and (max-width: 600px) {
+            #w {
+                display: none;
+            }
+
+            #s {
+                display: inherit;
+            }
+
+            #sidebar {
+                width: 50px;
+            }
+
+            #content {
+                margin-left: 50px;
+            }
+        }
+    </style>
+    <title>HEMS</title>
+</head>
+
+<body>
+
+    <div id="title-bar">
+        <a><i class="fas fa-bolt-lightning"></i> <span id="w">Home Energy Monitoring & Control System</span> <span
+                id="s">HEMCS</span></a>
+    </div>
+
+    <div id="sidebar">
+        <div class="icon">
+            <a href="#"><i class="fas fa-chart-simple"></i> <span id="w">Overview</span></a>
+            <a href="#"><i class="fas fa-clock-rotate-left"></i> <span id="w">History</span></a>
+            <a href="#"><i class="fas fa-robot"></i> <span id="w">Automate</span></a>
+            <a href="#"><i class="fas fa-gear"></i> <span id="w">Settings</span></a>
+        </div>
+    </div>
+
+    <div id="content">
+        <h2>Overview</h2>
+        <p>Contains graph, settings ...</p>
+    </div>
+
+</body>
+</html>
