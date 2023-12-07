@@ -1,6 +1,6 @@
-#ifndef WEB_H
-#define WEB_H
+#ifndef WEB_H_
+#define WEB_H_
 
+void start_web(void);
 
-void serveClient(void);
-#endif // WEB_H
+#endif
