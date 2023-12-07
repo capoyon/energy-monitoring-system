@@ -1,4 +1,3 @@
-#include "web.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h> 
@@ -8,13 +7,16 @@
 #include "spi_flash_mmap.h"
 #include <esp_http_server.h>
 #include "esp_spiffs.h"
-#include "index.h"
-
 
 #include "esp_log.h"
 #include "driver/gpio.h"
 #include <lwip/netdb.h>
 
+// Web files
+#include "overview.h"
+#include "history.h"
+#include "automate.h"
+#include "settings.h"
 
 #define LED_PIN 2
 int led_state = 0;
@@ -27,11 +29,35 @@ struct async_resp_arg {
 
 static const char *TAG = "WebSocket Server"; // TAG for debug
 
-esp_err_t get_req_handler(httpd_req_t *req)
+esp_err_t settings_page_handler(httpd_req_t *req)
 {
     int response;
     httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) html_index_html_gz, html_index_html_gz_len );
+    response = httpd_resp_send(req, (const char*) settings, settings_len);  // Assuming "settings" contains the HTML content for the settings page
+    return response;
+}
+
+esp_err_t overview_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) overview, overview_len);
+    return response;
+}
+
+esp_err_t history_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) history, history_len);
+    return response;
+}
+
+esp_err_t automate_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) automate, automate_len);
     return response;
 }
 
@@ -140,7 +166,7 @@ httpd_handle_t setup_websocket_server(void)
     httpd_uri_t uri_get = {
         .uri = "/",
         .method = HTTP_GET,
-        .handler = get_req_handler,
+        .handler = overview_page_handler,
         .user_ctx = NULL};
 
     httpd_uri_t ws = {
@@ -150,14 +176,49 @@ httpd_handle_t setup_websocket_server(void)
         .user_ctx = NULL,
         .is_websocket = true};
 
+    httpd_uri_t uri_settings = {
+    .uri = "/settings",
+    .method = HTTP_GET,
+    .handler = settings_page_handler,
+    .user_ctx = NULL
+    };
+
+    httpd_uri_t uri_overview = {
+        .uri = "/overview",
+        .method = HTTP_GET,
+        .handler = overview_page_handler,
+        .user_ctx = NULL
+    };
+
+    httpd_uri_t uri_history = {
+        .uri = "/history",
+        .method = HTTP_GET,
+        .handler = history_page_handler,
+        .user_ctx = NULL
+    };
+
+    httpd_uri_t uri_automate = {
+        .uri = "/automate",
+        .method = HTTP_GET,
+        .handler = automate_page_handler,
+        .user_ctx = NULL
+    };
+
+
     if (httpd_start(&server, &config) == ESP_OK)
     {
         httpd_register_uri_handler(server, &uri_get);
         httpd_register_uri_handler(server, &ws);
+        httpd_register_uri_handler(server, &uri_settings);
+        httpd_register_uri_handler(server, &uri_overview);
+        httpd_register_uri_handler(server, &uri_history);
+        httpd_register_uri_handler(server, &uri_automate);
     }
 
     return server;
 }
+
+
 
 void start_web(void)
 {
