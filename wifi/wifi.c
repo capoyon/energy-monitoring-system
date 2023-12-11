@@ -21,7 +21,7 @@
 
 /* Wifi Station Configuration */
 #define WIFI_STA_SSID           "WiFi"
-#define WIFI_STA_PASSWD         "password112233"
+#define WIFI_STA_PASSWD         "password11223"
 #define MAXIMUM_RETRY           5
 
 #if CONFIG_ESP_WIFI_AUTH_OPEN
@@ -48,6 +48,7 @@
 #define WIFI_CHANNEL        1
 #define MAX_STA_CONN        4
 
+#define WIFI_CONNECT_TIMEOUT_MS 30000
 
 /* The event group allows multiple bits for each event, but we only care about two events:
  * - we are connected to the AP with an IP
@@ -198,10 +199,8 @@ void setupWifi(void)
                                            WIFI_CONNECTED_BIT | WIFI_FAIL_BIT,
                                            pdFALSE,
                                            pdFALSE,
-                                           portMAX_DELAY);
+                                           WIFI_CONNECT_TIMEOUT_MS / portTICK_PERIOD_MS);
 
-    /* xEventGroupWaitBits() returns the bits before the call returned,
-     * hence we can test which event actually happened. */
     if (bits & WIFI_CONNECTED_BIT) {
         ESP_LOGI(TAG_STA, "connected to ap SSID:%s password:%s",
                  WIFI_STA_SSID, WIFI_STA_PASSWD);
@@ -209,10 +208,8 @@ void setupWifi(void)
         ESP_LOGI(TAG_STA, "Failed to connect to SSID:%s, password:%s",
                  WIFI_STA_SSID, WIFI_STA_PASSWD);
     } else {
-        ESP_LOGE(TAG_STA, "UNEXPECTED EVENT");
-        return;
+        ESP_LOGE(TAG_STA, "Connection timeout reached");
     }
-
     /* Set sta as the default interface */
     esp_netif_set_default_netif(esp_netif_sta);
 
