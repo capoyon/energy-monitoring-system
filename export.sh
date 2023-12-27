@@ -1,0 +1,1 @@
+. /home/cris/Code/esp-idf/export.sh

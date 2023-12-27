@@ -21,7 +21,7 @@
 
 /* Wifi Station Configuration */
 #define WIFI_STA_SSID           "WiFi"
-#define WIFI_STA_PASSWD         "password11223"
+#define WIFI_STA_PASSWD         "password112233"
 #define MAXIMUM_RETRY           5
 
 #if CONFIG_ESP_WIFI_AUTH_OPEN

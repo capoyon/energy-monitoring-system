@@ -10,6 +10,7 @@ idf_component_register(
         "../storage"
         "../time"
         "../web"
+        "../web/html"
         "../wifi"
 )
 

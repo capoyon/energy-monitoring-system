@@ -13,10 +13,10 @@
 #include <lwip/netdb.h>
 
 // Web files
-#include "overview.h"
-#include "history.h"
-#include "automate.h"
-#include "settings.h"
+#include "html/overview.h"
+#include "html/history.h"
+#include "html/automate.h"
+#include "html/settings.h"
 
 #define LED_PIN 2
 int led_state = 0;
@@ -29,37 +29,6 @@ struct async_resp_arg {
 
 static const char *TAG = "WebSocket Server"; // TAG for debug
 
-esp_err_t settings_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) settings, settings_len);  // Assuming "settings" contains the HTML content for the settings page
-    return response;
-}
-
-esp_err_t overview_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) overview, overview_len);
-    return response;
-}
-
-esp_err_t history_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) history, history_len);
-    return response;
-}
-
-esp_err_t automate_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) automate, automate_len);
-    return response;
-}
 
 
 // this function send the socks
@@ -103,6 +72,41 @@ static void ws_async_send(void *arg)
     free(resp_arg);
 }
 
+/* Handler variables */
+// for webpages
+static esp_err_t overview_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) overview, overview_len);
+    return response;
+}
+
+static esp_err_t history_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) history, history_len);
+    return response;
+}
+
+static esp_err_t automate_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) automate, automate_len);
+    return response;
+}
+
+static esp_err_t settings_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) settings, settings_len);
+    return response;
+}
+
+// handler for socket connection
 static esp_err_t trigger_async_send(httpd_handle_t handle, httpd_req_t *req)
 {
     struct async_resp_arg *resp_arg = malloc(sizeof(struct async_resp_arg));
@@ -111,6 +115,7 @@ static esp_err_t trigger_async_send(httpd_handle_t handle, httpd_req_t *req)
     return httpd_queue_work(handle, ws_async_send, resp_arg);
 }
 
+// hander for initializing socket
 static esp_err_t handle_ws_req(httpd_req_t *req)
 {
     if (req->method == HTTP_GET)
@@ -159,6 +164,9 @@ static esp_err_t handle_ws_req(httpd_req_t *req)
     return ESP_OK;
 }
 
+
+
+/* For handling all http request */
 httpd_handle_t setup_websocket_server(void)
 {
     httpd_config_t config = HTTPD_DEFAULT_CONFIG();
@@ -208,11 +216,13 @@ httpd_handle_t setup_websocket_server(void)
     if (httpd_start(&server, &config) == ESP_OK)
     {
         httpd_register_uri_handler(server, &uri_get);
-        httpd_register_uri_handler(server, &ws);
         httpd_register_uri_handler(server, &uri_settings);
         httpd_register_uri_handler(server, &uri_overview);
         httpd_register_uri_handler(server, &uri_history);
         httpd_register_uri_handler(server, &uri_automate);
+
+        // for the socks server
+        httpd_register_uri_handler(server, &ws);
     }
 
     return server;
