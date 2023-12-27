@@ -27,32 +27,51 @@ struct async_resp_arg {
     int fd;
 };
 
-static const char *TAG = "WebSocket Server"; // TAG for debug
+static const char *TAG = "WebSocket"; // TAG for debug
 
-
-
-// this function send the socks
-static void ws_async_send(void *arg)
+/* Handler variables */
+// for webpages
+esp_err_t overview_page_handler(httpd_req_t *req)
 {
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) overview, overview_len);
+    return response;
+}
+
+esp_err_t history_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) history, history_len);
+    return response;
+}
+
+esp_err_t automate_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) automate, automate_len);
+    return response;
+}
+
+esp_err_t settings_page_handler(httpd_req_t *req)
+{
+    int response;
+    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
+    response = httpd_resp_send(req, (const char*) settings, settings_len);
+    return response;
+}
+
+// Function to send WebSocket frame
+static void send_ws_frame(const char *payload, size_t len, httpd_ws_type_t type) {
     httpd_ws_frame_t ws_pkt;
-    struct async_resp_arg *resp_arg = arg;
-    httpd_handle_t hd = resp_arg->hd;
-    //int fd = resp_arg->fd;
 
-    // toggle the led pin
-    led_state = !led_state;
-    gpio_set_level(LED_PIN, led_state);
-    
-
-    char buff[4];
-    memset(buff, 0, sizeof(buff));
-    sprintf(buff, "%d",led_state);
-    
     memset(&ws_pkt, 0, sizeof(httpd_ws_frame_t));
-    ws_pkt.payload = (uint8_t *)buff;
-    ws_pkt.len = strlen(buff);
-    ws_pkt.type = HTTPD_WS_TYPE_TEXT;
-    
+    ws_pkt.payload = payload;
+    ws_pkt.len = len;
+    ws_pkt.type = type;
+
     static size_t max_clients = CONFIG_LWIP_MAX_LISTENING_TCP;
     size_t fds = max_clients;
     int client_fds[max_clients];
@@ -66,45 +85,44 @@ static void ws_async_send(void *arg)
     for (int i = 0; i < fds; i++) {
         int client_info = httpd_ws_get_fd_info(server, client_fds[i]);
         if (client_info == HTTPD_WS_CLIENT_WEBSOCKET) {
-            httpd_ws_send_frame_async(hd, client_fds[i], &ws_pkt);
+            httpd_ws_send_frame_async(server, client_fds[i], &ws_pkt);
         }
     }
+}
+
+// toggle the led pin and send it's status to websocket
+static void toggle_led(void *arg)
+{
+    struct async_resp_arg *resp_arg = arg;
+
+
+    led_state = !led_state;
+    gpio_set_level(LED_PIN, led_state);
+
+    char buff[4];
+    memset(buff, 0, sizeof(buff));
+    sprintf(buff, "%d", led_state);
+
+    // Send WebSocket frame
+    send_ws_frame(buff, strlen(buff), HTTPD_WS_TYPE_TEXT);
+
     free(resp_arg);
 }
 
-/* Handler variables */
-// for webpages
-static esp_err_t overview_page_handler(httpd_req_t *req)
+static void send_led_state()
 {
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) overview, overview_len);
-    return response;
+    char buff[4];
+    memset(buff, 0, sizeof(buff));
+    sprintf(buff, "%d", led_state);
+    send_ws_frame(buff, strlen(buff), HTTPD_WS_TYPE_TEXT);
 }
 
-static esp_err_t history_page_handler(httpd_req_t *req)
+static void send_greetings()
 {
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) history, history_len);
-    return response;
+    const char *buff = "hello this is message from esp32";
+    send_ws_frame(buff, strlen(buff), HTTPD_WS_TYPE_TEXT);
 }
 
-static esp_err_t automate_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) automate, automate_len);
-    return response;
-}
-
-static esp_err_t settings_page_handler(httpd_req_t *req)
-{
-    int response;
-    httpd_resp_set_hdr(req, "Content-Encoding", "gzip");
-    response = httpd_resp_send(req, (const char*) settings, settings_len);
-    return response;
-}
 
 // handler for socket connection
 static esp_err_t trigger_async_send(httpd_handle_t handle, httpd_req_t *req)
@@ -112,15 +130,17 @@ static esp_err_t trigger_async_send(httpd_handle_t handle, httpd_req_t *req)
     struct async_resp_arg *resp_arg = malloc(sizeof(struct async_resp_arg));
     resp_arg->hd = req->handle;
     resp_arg->fd = httpd_req_to_sockfd(req);
-    return httpd_queue_work(handle, ws_async_send, resp_arg);
+    return httpd_queue_work(handle, toggle_led, resp_arg);
 }
 
-// hander for initializing socket
+// hander for websocket
 static esp_err_t handle_ws_req(httpd_req_t *req)
 {
     if (req->method == HTTP_GET)
     {
-        ESP_LOGI(TAG, "Handshake done, the new connection was opened");
+        ESP_LOGI(TAG, "Handshake done, new connection opened");
+        send_greetings();
+        send_led_state();
         return ESP_OK;
     }
 
@@ -135,6 +155,7 @@ static esp_err_t handle_ws_req(httpd_req_t *req)
         return ret;
     }
 
+    ESP_LOGI(TAG, "Got socket, len = %d", ws_pkt.len);
     if (ws_pkt.len)
     {
         buf = calloc(1, ws_pkt.len + 1);
@@ -151,10 +172,8 @@ static esp_err_t handle_ws_req(httpd_req_t *req)
             free(buf);
             return ret;
         }
-        ESP_LOGI(TAG, "Got packet with message: %s", ws_pkt.payload);
+        ESP_LOGI(TAG, "payload: %s", ws_pkt.payload);
     }
-
-    ESP_LOGI(TAG, "frame len is %d", ws_pkt.len);
 
     if (ws_pkt.type == HTTPD_WS_TYPE_TEXT && strcmp((char *)ws_pkt.payload, "toggle") == 0)
     {
@@ -163,7 +182,6 @@ static esp_err_t handle_ws_req(httpd_req_t *req)
     }
     return ESP_OK;
 }
-
 
 
 /* For handling all http request */
@@ -185,10 +203,10 @@ httpd_handle_t setup_websocket_server(void)
         .is_websocket = true};
 
     httpd_uri_t uri_settings = {
-    .uri = "/settings",
-    .method = HTTP_GET,
-    .handler = settings_page_handler,
-    .user_ctx = NULL
+        .uri = "/settings",
+        .method = HTTP_GET,
+        .handler = settings_page_handler,
+        .user_ctx = NULL
     };
 
     httpd_uri_t uri_overview = {
@@ -220,19 +238,15 @@ httpd_handle_t setup_websocket_server(void)
         httpd_register_uri_handler(server, &uri_overview);
         httpd_register_uri_handler(server, &uri_history);
         httpd_register_uri_handler(server, &uri_automate);
-
-        // for the socks server
         httpd_register_uri_handler(server, &ws);
     }
-
     return server;
 }
 
-
-
+// Entry point function for the web socket
 void start_web(void)
 {
-
+    //initialize the pin
     esp_rom_gpio_pad_select_gpio(LED_PIN);
     gpio_set_direction(LED_PIN, GPIO_MODE_OUTPUT);
     led_state = 0;
