@@ -117,10 +117,9 @@ static void send_led_state()
     send_ws_frame(buff, strlen(buff), HTTPD_WS_TYPE_TEXT);
 }
 
-static void send_greetings()
+void send_strsocks(const char* httpdata, size_t httpdata_size)
 {
-    const char *buff = "hello this is message from esp32";
-    send_ws_frame(buff, strlen(buff), HTTPD_WS_TYPE_TEXT);
+    send_ws_frame(httpdata, httpdata_size, HTTPD_WS_TYPE_TEXT);
 }
 
 
@@ -139,7 +138,6 @@ static esp_err_t handle_ws_req(httpd_req_t *req)
     if (req->method == HTTP_GET)
     {
         ESP_LOGI(TAG, "Handshake done, new connection opened");
-        send_greetings();
         send_led_state();
         return ESP_OK;
     }

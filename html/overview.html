@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +22,8 @@
             top: 0;
             left: 0;
             z-index: 1;
+            height: 70px;
+            background-color: #f4f4f4;
         }
     
         #title-bar a {
@@ -64,7 +67,8 @@
             margin-left: 145px;
             padding: 4px 10px 10px 10px;
             border-top-left-radius: 10px;
-            height: calc(100vh - (55px + 20px));
+            height: auto;
+            /* height: calc(100vh - (55px + 20px)); */
         }
     
         #s {
@@ -98,6 +102,9 @@
         }
         </style>
     <title>HEMS | overview </title>
+    <script type="text/javascript">
+        !function(t){Date.now=Date.now||function(){return(new Date).getTime()};var X={extend:function(){arguments[0]=arguments[0]||{};for(var t=1;t<arguments.length;t++)for(var e in arguments[t])arguments[t].hasOwnProperty(e)&&("object"!=typeof arguments[t][e]||arguments[t][e]instanceof Array?arguments[0][e]=arguments[t][e]:arguments[0][e]=X.extend(arguments[0][e],arguments[t][e]));return arguments[0]},binarySearch:function(t,e){for(var i=0,s=t.length;i<s;){var a=i+s>>1;e<t[a][0]?s=a:i=1+a}return i},pixelSnap:function(t,e){return e%2==0?Math.round(t):Math.floor(t)+.5}};function e(t){this.options=X.extend({},e.defaultOptions,t),this.disabled=!1,this.clear()}function l(t){this.options=X.extend({},l.defaultChartOptions,t),this.seriesSet=[],this.currentValueRange=1,this.currentVisMinValue=0,this.lastRenderTimeMillis=0,this.lastChartTimestamp=0,this.mousemove=this.mousemove.bind(this),this.mouseout=this.mouseout.bind(this)}e.defaultOptions={resetBoundsInterval:3e3,resetBounds:!0},e.prototype.clear=function(){this.data=[],this.maxValue=Number.NaN,this.minValue=Number.NaN},e.prototype.resetBounds=function(){if(this.data.length){this.maxValue=this.data[0][1],this.minValue=this.data[0][1];for(var t=1;t<this.data.length;t++){var e=this.data[t][1];e>this.maxValue&&(this.maxValue=e),e<this.minValue&&(this.minValue=e)}}else this.maxValue=Number.NaN,this.minValue=Number.NaN},e.prototype.append=function(t,e,i){if(!isNaN(t)&&!isNaN(e)){var s=this.data.length-1;if(0<=s)for(var a=s;;){var n=this.data[a];if(t>=n[0]){t===n[0]?i?(n[1]+=e,e=n[1]):n[1]=e:this.data.splice(a+1,0,[t,e]);break}if(--a<0){this.data.splice(0,0,[t,e]);break}}else this.data.push([t,e]);this.maxValue=isNaN(this.maxValue)?e:Math.max(this.maxValue,e),this.minValue=isNaN(this.minValue)?e:Math.min(this.minValue,e)}},l.defaultChartOptions={millisPerPixel:20,enableDpiScaling:!0,yMinFormatter:function(t,e){return parseFloat(t).toFixed(e)},yMaxFormatter:function(t,e){return parseFloat(t).toFixed(e)},yIntermediateFormatter:function(t,e){return parseFloat(t).toFixed(e)},maxValueScale:1,minValueScale:1,interpolation:"bezier",scaleSmoothing:.125,maxDataSetLength:2,scrollBackwards:!(e.prototype.dropOldData=function(t,e){for(var i=0;this.data.length-i>=e&&this.data[i+1][0]<t;)i++;0!==i&&this.data.splice(0,i)}),displayDataFromPercentile:1,grid:{fillStyle:"#000000",strokeStyle:"#777777",lineWidth:2,millisPerLine:1e3,verticalSections:2,borderVisible:!0},labels:{fillStyle:"#ffffff",disabled:!1,fontSize:10,fontFamily:"monospace",precision:2,showIntermediateLabels:!1,intermediateLabelSameAxis:!0},title:{text:"",fillStyle:"#ffffff",fontSize:15,fontFamily:"monospace",verticalAlign:"middle"},horizontalLines:[],tooltip:!1,tooltipLine:{lineWidth:1,strokeStyle:"#BBBBBB"},tooltipFormatter:l.tooltipFormatter=function(t,e){var i,s=this.options.timestampFormatter||l.timeFormatter,a=document.createElement("div");a.appendChild(document.createTextNode(s(new Date(t))));for(var n=0;n<e.length;++n){""!==(i=e[n].series.options.tooltipLabel||"")&&(i+=" ");var o=document.createElement("span");o.style.color=e[n].series.options.strokeStyle,o.appendChild(document.createTextNode(i+this.options.yMaxFormatter(e[n].value,this.options.labels.precision))),a.appendChild(document.createElement("br")),a.appendChild(o)}return a.innerHTML},nonRealtimeData:!1,responsive:!1,limitFPS:0},l.AnimateCompatibility={requestAnimationFrame:function(t,e){return(window.requestAnimationFrame||window.webkitRequestAnimationFrame||window.mozRequestAnimationFrame||window.oRequestAnimationFrame||window.msRequestAnimationFrame||function(t){return window.setTimeout(function(){t(Date.now())},16)}).call(window,t,e)},cancelAnimationFrame:function(t){return(window.cancelAnimationFrame||function(t){clearTimeout(t)}).call(window,t)}},l.defaultSeriesPresentationOptions={lineWidth:1,strokeStyle:"#ffffff",fillToBottom:!0},l.prototype.addTimeSeries=function(t,e){this.seriesSet.push({timeSeries:t,options:X.extend({},l.defaultSeriesPresentationOptions,e)}),t.options.resetBounds&&0<t.options.resetBoundsInterval&&(t.resetBoundsTimerId=setInterval(function(){t.resetBounds()},t.options.resetBoundsInterval))},l.prototype.removeTimeSeries=function(t){for(var e=this.seriesSet.length,i=0;i<e;i++)if(this.seriesSet[i].timeSeries===t){this.seriesSet.splice(i,1);break}t.resetBoundsTimerId&&clearInterval(t.resetBoundsTimerId)},l.prototype.getTimeSeriesOptions=function(t){for(var e=this.seriesSet.length,i=0;i<e;i++)if(this.seriesSet[i].timeSeries===t)return this.seriesSet[i].options},l.prototype.bringToFront=function(t){for(var e=this.seriesSet.length,i=0;i<e;i++)if(this.seriesSet[i].timeSeries===t){var s=this.seriesSet.splice(i,1);this.seriesSet.push(s[0]);break}},l.prototype.streamTo=function(t,e){this.canvas=t,this.clientWidth=parseInt(this.canvas.getAttribute("width")),this.clientHeight=parseInt(this.canvas.getAttribute("height")),this.delay=e,this.start()},l.prototype.getTooltipEl=function(){return this.tooltipEl||(this.tooltipEl=document.createElement("div"),this.tooltipEl.className="smoothie-chart-tooltip",this.tooltipEl.style.pointerEvents="none",this.tooltipEl.style.position="absolute",this.tooltipEl.style.display="none",document.body.appendChild(this.tooltipEl)),this.tooltipEl},l.prototype.updateTooltip=function(){if(this.options.tooltip){var t=this.getTooltipEl();if(this.mouseover&&this.options.tooltip){for(var e=this.lastChartTimestamp,i=this.options.scrollBackwards?e-this.mouseX*this.options.millisPerPixel:e-(this.clientWidth-this.mouseX)*this.options.millisPerPixel,s=[],a=0;a<this.seriesSet.length;a++){var n,o=this.seriesSet[a].timeSeries;o.disabled||0<(n=X.binarySearch(o.data,i))&&n<o.data.length&&s.push({series:this.seriesSet[a],index:n,value:o.data[n][1]})}s.length?(t.innerHTML=this.options.tooltipFormatter.call(this,i,s),t.style.display="block"):t.style.display="none"}else t.style.display="none"}},l.prototype.mousemove=function(t){this.mouseover=!0,this.mouseX=t.offsetX,this.mouseY=t.offsetY,this.mousePageX=t.pageX,this.mousePageY=t.pageY,this.options.tooltip&&((t=this.getTooltipEl()).style.top=Math.round(this.mousePageY)+"px",t.style.left=Math.round(this.mousePageX)+"px",this.updateTooltip())},l.prototype.mouseout=function(){this.mouseover=!1,this.mouseX=this.mouseY=-1,this.tooltipEl&&(this.tooltipEl.style.display="none")},l.prototype.resize=function(){var t,e,i=this.options.enableDpiScaling&&window?window.devicePixelRatio:1;this.options.responsive?(t=this.canvas.offsetWidth,e=this.canvas.offsetHeight,t!==this.lastWidth&&(this.lastWidth=t,this.canvas.setAttribute("width",Math.floor(t*i).toString()),this.canvas.getContext("2d").scale(i,i)),e!==this.lastHeight&&(this.lastHeight=e,this.canvas.setAttribute("height",Math.floor(e*i).toString()),this.canvas.getContext("2d").scale(i,i)),this.clientWidth=t,this.clientHeight=e):(t=parseInt(this.canvas.getAttribute("width")),e=parseInt(this.canvas.getAttribute("height")),1!==i?(Math.floor(this.clientWidth*i)!==t&&(this.canvas.setAttribute("width",Math.floor(t*i).toString()),this.canvas.style.width=t+"px",this.clientWidth=t,this.canvas.getContext("2d").scale(i,i)),Math.floor(this.clientHeight*i)!==e&&(this.canvas.setAttribute("height",Math.floor(e*i).toString()),this.canvas.style.height=e+"px",this.clientHeight=e,this.canvas.getContext("2d").scale(i,i))):(this.clientWidth=t,this.clientHeight=e))},l.prototype.start=function(){var i;this.frame||(this.canvas.addEventListener("mousemove",this.mousemove),this.canvas.addEventListener("mouseout",this.mouseout),(i=function(){this.frame=l.AnimateCompatibility.requestAnimationFrame(function(){var t,e;this.options.nonRealtimeData?(t=new Date(0),e=this.seriesSet.reduce(function(t,e){var i=e.timeSeries.data,e=Math.round(this.options.displayDataFromPercentile*i.length)-1;return e=(e=0<=e?e:0)<=i.length-1?e:i.length-1,i&&0<i.length&&(t=(e=i[e][0])<t?t:e),t}.bind(this),t),this.render(this.canvas,t<e?e:null)):this.render(),i()}.bind(this))}.bind(this))())},l.prototype.stop=function(){this.frame&&(l.AnimateCompatibility.cancelAnimationFrame(this.frame),delete this.frame,this.canvas.removeEventListener("mousemove",this.mousemove),this.canvas.removeEventListener("mouseout",this.mouseout))},l.prototype.updateValueRange=function(){for(var t,e,i=this.options,s=Number.NaN,a=Number.NaN,n=0;n<this.seriesSet.length;n++){var o=this.seriesSet[n].timeSeries;o.disabled||(isNaN(o.maxValue)||(s=isNaN(s)?o.maxValue:Math.max(s,o.maxValue)),isNaN(o.minValue)||(a=isNaN(a)?o.minValue:Math.min(a,o.minValue)))}null!=i.maxValue?s=i.maxValue:s*=i.maxValueScale,null!=i.minValue?a=i.minValue:a-=Math.abs(a*i.minValueScale-a),this.options.yRangeFunction&&(a=(e=this.options.yRangeFunction({min:a,max:s})).min,s=e.max),isNaN(s)||isNaN(a)||(t=s-a-this.currentValueRange,e=a-this.currentVisMinValue,this.isAnimatingScale=.1<Math.abs(t)||.1<Math.abs(e),this.currentValueRange+=i.scaleSmoothing*t,this.currentVisMinValue+=i.scaleSmoothing*e),this.valueRange={min:a,max:s}},l.prototype.render=function(t,i){var s=this.options,e=Date.now();if(!(0<s.limitFPS&&e-this.lastRenderTimeMillis<1e3/s.limitFPS)){if(i=(i||e)-(this.delay||0),i-=i%s.millisPerPixel,!this.isAnimatingScale){var a=this.lastChartTimestamp===i;if(a)if(!(e-this.lastRenderTimeMillis>1e3/6))return}this.lastRenderTimeMillis=e,this.lastChartTimestamp=i,this.resize();function n(t,e){t=i/s.millisPerPixel-t/s.millisPerPixel,t=s.scrollBackwards?t:l.width-t;return X.pixelSnap(t,e)}var o=(t=t||this.canvas).getContext("2d"),l={top:0,left:0,width:this.clientWidth,height:this.clientHeight},r=i-l.width*s.millisPerPixel,h=function(t,e){t-=this.currentVisMinValue,t=0===this.currentValueRange?l.height:l.height*(1-t/this.currentValueRange);return X.pixelSnap(t,e)}.bind(this);if(this.updateValueRange(),o.font=s.labels.fontSize+"px "+s.labels.fontFamily,o.save(),o.translate(l.left,l.top),o.beginPath(),o.rect(0,0,l.width,l.height),o.clip(),o.save(),o.fillStyle=s.grid.fillStyle,o.clearRect(0,0,l.width,l.height),o.fillRect(0,0,l.width,l.height),o.restore(),o.save(),o.lineWidth=s.grid.lineWidth,o.strokeStyle=s.grid.strokeStyle,0<s.grid.millisPerLine){o.beginPath();for(var m=i-i%s.grid.millisPerLine;r<=m;m-=s.grid.millisPerLine){var d=n(m,s.grid.lineWidth);o.moveTo(d,0),o.lineTo(d,l.height)}o.stroke()}for(var u=1;u<s.grid.verticalSections;u++){var c=X.pixelSnap(u*l.height/s.grid.verticalSections,s.grid.lineWidth);o.beginPath(),o.moveTo(0,c),o.lineTo(l.width,c),o.stroke()}if(s.grid.borderVisible&&o.strokeRect(0,0,l.width,l.height),o.restore(),s.horizontalLines&&s.horizontalLines.length)for(var p=0;p<s.horizontalLines.length;p++){var f=s.horizontalLines[p],g=f.lineWidth||1,v=h(f.value,g);o.strokeStyle=f.color||"#ffffff",o.lineWidth=g,o.beginPath(),o.moveTo(0,v),o.lineTo(l.width,v),o.stroke()}for(var S=0;S<this.seriesSet.length;S++){var y=this.seriesSet[S].timeSeries,x=y.data;if(y.dropOldData(r,s.maxDataSetLength),!(x.length<=1||y.disabled)){o.save();var w=this.seriesSet[S].options,b=w.strokeStyle&&"none"!==w.strokeStyle,T=b?w.lineWidth:0;o.beginPath();var N,V=n(x[0][0],T),y=h(x[0][1],T),F=V,k=y;switch(o.moveTo(V,y),w.interpolation||s.interpolation){case"linear":case"line":N=function(t,e,i,s){o.lineTo(t,e)};break;case"bezier":default:N=function(t,e,i,s){o.bezierCurveTo(Math.round((i+t)/2),s,Math.round(i+t)/2,e,t,e)};break;case"step":N=function(t,e,i,s){o.lineTo(t,s),o.lineTo(t,e)}}for(var P=1;P<x.length;P++){var M=x[P],B=n(M[0],T),M=h(M[1],T);N(B,M,F,k),F=B,k=M}b&&(o.lineWidth=w.lineWidth,o.strokeStyle=w.strokeStyle,o.stroke()),w.fillStyle&&(b=w.fillToBottom?l.height+T+1:h(0,0),o.lineTo(F,b),o.lineTo(V,b),o.fillStyle=w.fillStyle,o.fill()),o.restore()}}s.tooltip&&0<=this.mouseX&&(o.lineWidth=s.tooltipLine.lineWidth,o.strokeStyle=s.tooltipLine.strokeStyle,o.beginPath(),o.moveTo(this.mouseX,0),o.lineTo(this.mouseX,l.height),o.stroke()),this.updateTooltip();var R,A,L=s.labels;if(L.disabled||isNaN(this.valueRange.min)||isNaN(this.valueRange.max)||(e=s.yMaxFormatter(this.valueRange.max,L.precision),A=s.yMinFormatter(this.valueRange.min,L.precision),t=s.scrollBackwards?0:l.width-o.measureText(e).width-2,R=s.scrollBackwards?0:l.width-o.measureText(A).width-2,o.fillStyle=L.fillStyle,o.fillText(e,t,L.fontSize),o.fillText(A,R,l.height-2)),L.showIntermediateLabels&&!isNaN(this.valueRange.min)&&!isNaN(this.valueRange.max)&&0<s.grid.verticalSections)for(var W=(this.valueRange.max-this.valueRange.min)/s.grid.verticalSections,E=l.height/s.grid.verticalSections,u=1;u<s.grid.verticalSections;u++){var c=l.height-Math.round(u*E),C=s.yIntermediateFormatter(this.valueRange.min+u*W,L.precision),D=L.intermediateLabelSameAxis?s.scrollBackwards?0:l.width-o.measureText(C).width-2:s.scrollBackwards?l.width-o.measureText(C).width-2:0;o.fillText(C,D,c-s.grid.lineWidth)}if(s.timestampFormatter&&0<s.grid.millisPerLine)for(var z=s.scrollBackwards?o.measureText(A).width:l.width-o.measureText(A).width+4,m=i-i%s.grid.millisPerLine;r<=m;m-=s.grid.millisPerLine){var I,H,d=n(m,0);(!s.scrollBackwards&&d<z||s.scrollBackwards&&z<d)&&(H=new Date(m),I=s.timestampFormatter(H),H=o.measureText(I).width,z=s.scrollBackwards?d+H+2:d-H-2,o.fillStyle=s.labels.fillStyle,s.scrollBackwards?o.fillText(I,d,l.height-2):o.fillText(I,d-H,l.height-2))}""!==s.title.text&&(o.font=s.title.fontSize+"px "+s.title.fontFamily,R=s.scrollBackwards?l.width-o.measureText(s.title.text).width-2:2,A="bottom"==s.title.verticalAlign?(o.textBaseline="bottom",l.height):"middle"==s.title.verticalAlign?(o.textBaseline="middle",l.height/2):(o.textBaseline="top",0),o.fillStyle=s.title.fillStyle,o.fillText(s.title.text,R,A)),o.restore()}},l.timeFormatter=function(t){function e(t){return(t<10?"0":"")+t}return e(t.getHours())+":"+e(t.getMinutes())+":"+e(t.getSeconds())},t.TimeSeries=e,t.SmoothieChart=l}("undefined"==typeof exports?this:exports);
+    </script>
 </head>
 
 <body>
@@ -106,7 +113,7 @@
         <a>
             <svg height="24" width="24" viewBox="0 0 384 512"><path opacity="1" fill="#1E3050" d="M0 256L28.5 28c2-16 15.6-28 31.8-28H228.9c15 0 27.1 12.1 27.1 27.1c0 3.2-.6 6.5-1.7 9.5L208 160H347.3c20.2 0 36.7 16.4 36.7 36.7c0 7.4-2.2 14.6-6.4 20.7l-192.2 281c-5.9 8.6-15.6 13.7-25.9 13.7h-2.9c-15.7 0-28.5-12.8-28.5-28.5c0-2.3 .3-4.6 .9-6.9L176 288H32c-17.7 0-32-14.3-32-32z"/></svg> 
             <span id="w">Home Energy Monitoring & Control System</span>
-            <spanid="s"> HEMCS</span>
+            <span id="s"> HEMCS</span>
         </a>
     </div>
 
@@ -132,51 +139,156 @@
     </div>
 
     <div id="content">
-        <div class="card">
-            <h2>Usage Overview</h2>
-            <p><button id="button" class="button">Toggle LED</button></p>
-            <p class="state">State: <span id="state">%s</span></p>
-        </div>
+        <h2>Usage Overview</h2>
     </div>
-    <script>
-        var gateway = `ws://${window.location.hostname}/ws`;
-        var websocket;
-        window.addEventListener('load', onLoad);
-        function initWebSocket() {
-            console.log('Trying to open a WebSocket connection...');
-            websocket = new WebSocket(gateway);
-            websocket.onopen = onOpen;
-            websocket.onclose = onClose;
-            websocket.onmessage = onMessage; 
-        }
-        function onOpen(event) {
-            console.log('Connection opened');
-        }
-        function onClose(event) {
-            console.log('Connection closed');
-            setTimeout(initWebSocket, 2000);
-        }
-        function onMessage(event) {
-            var state;
-            console.log(event);
-            if (event.data == "1") {
-                state = "ON";
-            }
-            else {
-                state = "OFF";
-            }
-            document.getElementById('state').innerHTML = state;
-        }
-        function onLoad(event) {
-            initWebSocket();
-            initButton();
-        }
-        function initButton() {
-            document.getElementById('button').addEventListener('click', toggle);
-        }
-        function toggle() {
-            websocket.send('toggle');
-        }
-    </script>
 </body>
+<script>
+    var data = [];
+
+    var gateway = `ws://${window.location.hostname}/ws`;
+    var websocket;
+    window.addEventListener('load', onLoad);
+    function initWebSocket() {
+        console.log('Trying to open a WebSocket connection...');
+        websocket = new WebSocket(gateway);
+        websocket.onopen = onOpen;
+        websocket.onclose = onClose;
+        websocket.onmessage = onMessage; 
+    }
+    function onOpen(event) {
+        console.log('Connection opened');
+    }
+    function onClose(event) {
+        console.log('Connection closed');
+        setTimeout(initWebSocket, 2000);
+    }
+    function onMessage(event) {
+        var state;
+        console.log(event.data);
+        if (event.data == "1") {
+            state = "ON";
+        }
+        else {
+            state = "OFF";
+        }
+        document.getElementById('state').innerHTML = state;
+    }
+    function onLoad(event) {
+        initWebSocket();
+        initButton();
+    }
+    function initButton() {
+        document.getElementById('button').addEventListener('click', toggle);
+    }
+    function toggle() {
+        websocket.send('toggle');
+    }
+
+
+
+    /*front end manipulation funcitons*/
+    var lines = [];
+    var isTableInit = false;
+    function generateRandomNumbers() {
+        var tmp = Array.from({ length: 4 }, () => Math.floor(Math.random() * 100) + 1);
+        data = tmp;
+
+        if (!isTableInit) {
+            initLiveGraph(data);
+            isTableInit = true;
+        }
+
+        console.log(data);
+        addLiveGraph();
+    }
+
+    setInterval(generateRandomNumbers, 1000);
+
+    function changeElementVal(newVal, id) {
+        var element = document.getElementById(id);
+        element.innerText = newVal.toFixed(2);
+    }
+
+    function appendLiveGraphToContent(lgTitle, lgTotalId, lgId) {
+        var liveGraphDiv = document.createElement('div');
+        liveGraphDiv.id = 'live-graph';
+
+        var htmlContent = `
+            <p>${lgTitle}: <span id="${lgTotalId}">12</span> kWph</p>
+            <canvas id="${lgId}" class="LiveGraph" width="500" height="100" style="cursor: e-resize; border: 1px solid rgb(124, 123, 123); border-radius: 4px;"></canvas>
+        `;
+
+        liveGraphDiv.innerHTML = htmlContent;
+        var contentDiv = document.getElementById('content');
+        contentDiv.appendChild(liveGraphDiv);
+
+        var newLine = new TimeSeries();
+        lines.push(newLine);
+    
+        var newSmoothieChart = new SmoothieChart({
+            grid: {
+                strokeStyle: 'rgb(0, 0, 0,0.5)',
+                fillStyle: 'rgb(255, 255, 255)',
+                lineWidth: 1,
+                millisPerLine: 250,
+                verticalSections: 6
+            },
+            labels: {
+                fillStyle: 'rgb(0, 0, 0)'
+            },
+            tooltip: true,
+        });
+        var color = getRandomColor();
+        newSmoothieChart.addTimeSeries(newLine, {
+            strokeStyle: color,
+            fillStyle: color+'50',
+            lineWidth: 1
+        });
+
+        newSmoothieChart.streamTo(document.getElementById(lgId), 1000);
+    }
+
+    function initLiveGraph(data) {
+        for (var i = 0; i < data.length; i++) {
+            var lgTitle = "Value " + i;
+            var lgTotalId = `lg${i}_total`;
+            var lgId = `lg${i}`;
+
+            appendLiveGraphToContent(lgTitle, lgTotalId, lgId);
+        }
+        resizeCanvas();
+    }
+
+    function addLiveGraph() {
+        var total = 0;
+
+        for (var i = 0; i < lines.length; i++) {
+            lines[i].append(Date.now(), data[i]);
+            changeElementVal(data[i],`lg${i}_total`);
+        }
+    }
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+
+        
+        for (var i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 8)];
+        }
+        console.log(color);
+        return color;
+    }
+    // Resize the canvas width based on the parent div's width
+    function resizeCanvas() {
+        var chartContainer = document.getElementById('content');
+        var canvases = document.getElementsByClassName('LiveGraph');
+
+        for (var i = 0; i < canvases.length; i++) {
+            canvases[i].width = chartContainer.clientWidth - 20;
+        }
+    }
+    window.addEventListener('resize', resizeCanvas);
+
+</script>
 </html>
