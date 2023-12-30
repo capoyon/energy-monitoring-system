@@ -163,46 +163,42 @@
         setTimeout(initWebSocket, 2000);
     }
     function onMessage(event) {
-        var state;
         console.log(event.data);
-        if (event.data == "1") {
-            state = "ON";
+
+        var jsonObject = JSON.parse(event.data);
+        var cmd = jsonObject.cmd;
+        var httpdata = jsonObject.data;
+   
+        switch (cmd) {
+        case 1:
+            console.log("Command 1 executed");
+            break;
+        case 2:
+            console.log("Command 2 executed");
+            graphSensorData(httpdata);
+            break;
+        case 3:
+            console.log("Command 3 executed");
+            break;
+        default:
+            console.log("Unknown command");
         }
-        else {
-            state = "OFF";
-        }
-        document.getElementById('state').innerHTML = state;
     }
     function onLoad(event) {
         initWebSocket();
-        initButton();
     }
-    function initButton() {
-        document.getElementById('button').addEventListener('click', toggle);
-    }
-    function toggle() {
-        websocket.send('toggle');
-    }
-
-
-
     /*front end manipulation funcitons*/
     var lines = [];
     var isTableInit = false;
-    function generateRandomNumbers() {
-        var tmp = Array.from({ length: 4 }, () => Math.floor(Math.random() * 100) + 1);
-        data = tmp;
-
+    function graphSensorData(httpdata) {
+        data = httpdata;
         if (!isTableInit) {
             initLiveGraph(data);
             isTableInit = true;
         }
-
         console.log(data);
         addLiveGraph();
     }
-
-    setInterval(generateRandomNumbers, 1000);
 
     function changeElementVal(newVal, id) {
         var element = document.getElementById(id);
