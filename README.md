@@ -14,3 +14,6 @@ This project presents an energy monitoring and control system leveraging the cap
     idf.py build
 #### Flashing:
     idf.py flash && idf.py monitor
+
+
+    Transfered to arduino IDE
