@@ -16,4 +16,4 @@ This project presents an energy monitoring and control system leveraging the cap
     idf.py flash && idf.py monitor
 
 
-    Transfered to arduino IDE
+    Transfered to arduino IDE due to PZEM library availability
